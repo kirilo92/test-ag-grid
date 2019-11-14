@@ -1,0 +1,23 @@
+<div class="tool-bar">
+    <button (click)="toggleSelectionMode()">Toggle Selection Mode</button>
+    <p>Total Records: {{ totalCount}}</p>
+    <p>Selected Records: {{ selectedCount}}</p>
+</div>
+<ag-grid-angular 
+    style="width: 100%; height: 600px;" 
+    class="ag-theme-balham"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    [modules]="modules"
+    [getRowHeight]="getRowHeight"
+    [sideBar]="sideBar"
+    [defaultColDef]="defaultColDef"
+    [getContextMenuItems]="getContextMenuItems"
+    [frameworkComponents]="frameworkComponents"
+    [rowSelection]="rowSelection"
+    [rowMultiSelectWithClick]="true"
+    (rowSelected)="onRowSelected($event)"
+    (selectionChanged)="onSelectionChanged($event)"
+    (gridReady)="onGridReady($event)"
+    >
+</ag-grid-angular>

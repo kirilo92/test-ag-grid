@@ -1,0 +1,10 @@
+<div style="text-align: center">
+<span>
+    <h2><i class="fa fa-calculator"></i> Custom Stats</h2>
+    <button (click)="toggleSelectionMode()">Toggle Selection Mode</button>
+    <dl style="font-size: large; padding: 30px 40px 10px 30px">
+        <dt class="totalStyle">Total Records: {{ params.api.rowModel.rootNode.allChildrenCount }}<b></b></dt>
+        <dt class="totalStyle">Selected: {{ params.selectedCount }} <b></b></dt>
+    </dl>
+</span>
+</div>
