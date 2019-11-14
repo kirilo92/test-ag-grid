@@ -120,17 +120,11 @@ export class MyGridApplicationComponent {
 
     onRowSelected(event) {
       this.selectedCount = event.api.getSelectedNodes().length;
-      this.changeRowData(event, event.api.getSelectedNodes());
-      event.api.updateRowData(this.rowData);
-    }
-
-    changeRowData(event, selectedNodes) {
-      console.log(this.rowData);
       this.rowData.map((item, id) => {
         this.rowData[id].checkBox = false;
         console.log(this.rowData[id].checkBox);
       });
-      selectedNodes.map(item => {
+      event.api.getSelectedNodes().map(item => {
         this.rowData[item.childIndex].checkBox = true;
       });
       event.api.updateRowData(this.rowData);
