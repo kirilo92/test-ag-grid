@@ -1,15 +1,15 @@
-import {BrowserModule} from "@angular/platform-browser";
-import {NgModule} from "@angular/core";
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 import { AgGridModule } from '@ag-grid-community/angular';
 import { HttpClientModule } from '@angular/common/http';
-import {AppComponent} from "./app.component";
-import {MyGridApplicationComponent} from "./my-grid-application/my-grid-application.component";
-import { ThumbnailComponent } from './thumbnail/thumbnail.component';
-import { DateOutputComponent } from './date-output/date-output.component';
-import { VideoLinkComponent } from './video-link/video-link.component';
-import { SelectBoxComponent } from './select-box/select-box.component';
-import { CustomToolPanelComponent } from './custom-tool-panel/custom-tool-panel.component';
-// import { SelectBoxHeaderComponent } from './select-box-header/select-box-header.component';
+import {AppComponent} from './app.component';
+import {MyGridApplicationComponent} from './my-grid-application/my-grid-application.component';
+import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
+import { DateOutputComponent } from './components/date-output/date-output.component';
+import { VideoLinkComponent } from './components/video-link/video-link.component';
+import { SelectBoxHeaderComponent } from './components/select-box-header/select-box-header.component';
+import { SelectBoxComponent } from './components/select-box/select-box.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -18,21 +18,20 @@ import { CustomToolPanelComponent } from './custom-tool-panel/custom-tool-panel.
         ThumbnailComponent,
         DateOutputComponent,
         VideoLinkComponent,
-        SelectBoxComponent,
-        CustomToolPanelComponent,
-        // SelectBoxHeaderComponent
+        SelectBoxHeaderComponent,
+        SelectBoxComponent
     ],
     imports: [
         BrowserModule,
         HttpClientModule,
+        FormsModule,
         AgGridModule.withComponents(
             [
               ThumbnailComponent,
               DateOutputComponent,
               VideoLinkComponent,
-              SelectBoxComponent,
-              CustomToolPanelComponent,
-              // SelectBoxHeaderComponent
+              SelectBoxHeaderComponent,
+              SelectBoxComponent
             ]
         )
     ],

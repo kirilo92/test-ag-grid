@@ -1,12 +1,11 @@
-import {Component} from "@angular/core";
-import { AllModules } from "@ag-grid-enterprise/all-modules";
-import { ApiService } from '../api.service';
-import { DateOutputComponent } from "../date-output/date-output.component";
-import { ThumbnailComponent } from "../thumbnail/thumbnail.component";
-import { VideoLinkComponent } from "../video-link/video-link.component";
-import { SelectBoxComponent } from "../select-box/select-box.component";
-import { CustomToolPanelComponent } from '../custom-tool-panel/custom-tool-panel.component';
-// import { SelectBoxHeaderComponent } from '../select-box-header/select-box-header.component';
+import {Component} from '@angular/core';
+import { AllModules } from '@ag-grid-enterprise/all-modules';
+import { ApiService } from '../service/api.service';
+import { DateOutputComponent } from '../components/date-output/date-output.component';
+import { ThumbnailComponent } from '../components/thumbnail/thumbnail.component';
+import { VideoLinkComponent } from '../components/video-link/video-link.component';
+import { SelectBoxComponent } from '../components/select-box/select-box.component';
+import { SelectBoxHeaderComponent } from '../components/select-box-header/select-box-header.component';
 
 @Component({
     selector: 'app-my-grid-application',
@@ -14,8 +13,6 @@ import { CustomToolPanelComponent } from '../custom-tool-panel/custom-tool-panel
     styleUrls: ['./my-grid-application.component.scss']
 })
 export class MyGridApplicationComponent {
-    // // private gridOptions: GridOptions;
-    // modules = AllModules;
     private selectionMode = false;
     private totalCount = 0;
     private selectedCount = 0;
@@ -23,93 +20,54 @@ export class MyGridApplicationComponent {
     private gridApi;
     private gridColumnApi;
     public modules = AllModules;
-
     private columnDefs;
-    private defaultColDef;
     private getRowHeight;
-    private rowData: [];
+    private rowData;
     private rowSelection;
-    private icons;
-    private sideBar;
-    private frameworkComponents;
     constructor(private apiService: ApiService) {
       this.columnDefs = [
         {
-            headerName: "",
-            field: "checkBox",
+            headerName: '',
+            field: 'checkBox',
             width: 50,
-            headerCheckboxSelection: true,
-            headerCheckboxSelectionFilteredOnly: true,
-            checkboxSelection: true,
             cellRendererFramework: SelectBoxComponent,
-            // headerComponent: SelectBoxHeaderComponent
+            headerComponentFramework: SelectBoxHeaderComponent,
+            headerComponentParams: {setSelectedCount: (checkBox) => {
+              this.setSelectedCount(checkBox);
+            }}
         },
         {
-            headerName: "",
-            field: "thumbnails",
+            headerName: '',
+            field: 'thumbnails',
             cellRendererFramework: ThumbnailComponent,
             width: 120,
             cellStyle: {padding: 0}
         },
         {
-            headerName: "Published on",
-            field: "publishedAt",
+            headerName: 'Published on',
+            field: 'publishedAt',
             cellRendererFramework: DateOutputComponent,
         },
         {
-          headerName: "Video Title",
-          field: "title",
+          headerName: 'Video Title',
+          field: 'title',
           cellRendererFramework: VideoLinkComponent,
           cellStyle: {overflow: 'hidden', whiteSpace: 'normal', wordBreak: 'break-word'}
         },
         {
-          headerName: "Description",
-          field: "description",
+          headerName: 'Description',
+          field: 'description',
           cellStyle: {overflow: 'hidden', whiteSpace: 'normal', wordBreak: 'break-word'}
         }
       ];
-      this.getRowHeight = function(params) {
+      this.getRowHeight = () => {
         return 90;
       };
-
-      this.rowSelection = "";
-      // this.defaultColDef = { filter: true };
-      // this.icons = { "custom-stats": '<span class="ag-icon ag-icon-custom-stats"></span>' };
-      // this.sideBar = {
-      //   toolPanels: [
-      //     {
-      //       id: "columns",
-      //       labelDefault: "Columns",
-      //       labelKey: "columns",
-      //       iconKey: "columns",
-      //       toolPanel: "agColumnsToolPanel"
-      //     },
-      //     {
-      //       id: "filters",
-      //       labelDefault: "Filters",
-      //       labelKey: "filters",
-      //       iconKey: "filter",
-      //       toolPanel: "agFiltersToolPanel"
-      //     },
-      //     {
-      //       id: "customStats",
-      //       labelDefault: "Custom Stats",
-      //       labelKey: "customStats",
-      //       iconKey: "custom-stats",
-      //       toolPanel: "customStatsToolPanel",
-      //       toolPanelParams: {selectedCount: 45, gridColumnApi: this.gridColumnApi}
-      //     }
-      //   ],
-      //   defaultToolPanel: "customStats"
-      // };
-      // this.frameworkComponents = { customStatsToolPanel: CustomToolPanelComponent };
-    }
-
-    ngOnInit() {
+      this.rowSelection = '';
     }
 
     updateRowData() {
-      this.apiService.getData().subscribe((data)=>{
+      this.apiService.getData().subscribe( (data) => {
         this.data = data;
         this.rowData = this.data.items.map(item => {
           return {
@@ -125,18 +83,18 @@ export class MyGridApplicationComponent {
     }
 
     getContextMenuItems(params) {
-        var result = [
+        const result = [
           {
-            name: "Open in new tab",
-            action: function() {
-              window.open("https://www.youtube.com/watch?v=" + params.value, '_blank');
+            name: 'Open in new tab',
+            action() {
+              window.open('https://www.youtube.com/watch?v=' + params.value, '_blank');
             },
-            cssClasses: [params.column.colId !== "title" ? "display-none" : ""]
+            cssClasses: [params.column.colId !== 'title' ? 'display-none' : '']
           },
-          "copy",
-          "copyWithHeaders",
-          "separator",
-          "paste"
+          'copy',
+          'copyWithHeaders',
+          'separator',
+          'paste'
         ];
         return result;
     }
@@ -153,18 +111,32 @@ export class MyGridApplicationComponent {
       this.gridColumnApi.setColumnVisible('checkBox', this.selectionMode);
       if (this.selectionMode === false) {
         this.gridApi.deselectAll();
-        this.rowSelection = "";
+        this.rowSelection = '';
         this.selectedCount = 0;
       } else {
-        this.rowSelection = "multiple";
+        this.rowSelection = 'multiple';
       }
     }
 
     onRowSelected(event) {
       this.selectedCount = event.api.getSelectedNodes().length;
+      this.changeRowData(event, event.api.getSelectedNodes());
+      event.api.updateRowData(this.rowData);
     }
-  
-    onSelectionChanged(event) {
-      this.selectedCount = event.api.getSelectedNodes().length;
+
+    changeRowData(event, selectedNodes) {
+      console.log(this.rowData);
+      this.rowData.map((item, id) => {
+        this.rowData[id].checkBox = false;
+        console.log(this.rowData[id].checkBox);
+      });
+      selectedNodes.map(item => {
+        this.rowData[item.childIndex].checkBox = true;
+      });
+      event.api.updateRowData(this.rowData);
+    }
+
+    setSelectedCount(checkBox) {
+      this.selectedCount = checkBox ? this.totalCount : 0;
     }
 }

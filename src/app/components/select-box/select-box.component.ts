@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-date-output',
-  templateUrl: './date-output.component.html',
-  styleUrls: ['./date-output.component.scss']
+  selector: 'app-select-box',
+  templateUrl: './select-box.component.html',
+  styleUrls: ['./select-box.component.scss']
 })
-export class DateOutputComponent implements OnInit {
+export class SelectBoxComponent implements OnInit {
   private params: any;
 
   agInit(params: any): void {
@@ -15,5 +15,4 @@ export class DateOutputComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }
